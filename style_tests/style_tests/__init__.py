@@ -1,35 +1,30 @@
 """Testing the style of the code."""
 
 import contextlib
+import importlib
 import os
 import pathlib
 import re
+import types
+from typing import ClassVar, Sequence, Tuple
 import unittest
 
 import black
 import click
 import isort.main
 
-# this is to avoid:
-#   RuntimeError: dictionary changed size during iteration
-# in asteroid from pylint
-import pulumi_command.local.command as _
-import pulumi_command.remote.command as _
 import pycodestyle
 import pylint.lint
-import typeguard
-
-with typeguard.install_import_hook("pulumi_state_splitter"):
-    import pulumi_state_splitter
 
 
 class TestStyle(unittest.TestCase):
     """Testing the style of the package and tests code."""
 
-    _package_paths = (
-        str(pathlib.Path(pulumi_state_splitter.__file__).parent),
-        str(pathlib.Path(__file__).parent),
-    )
+    modules: ClassVar[Sequence[types.ModuleType]]
+
+    @property
+    def _paths(self) -> Tuple[str]:
+        return tuple(str(pathlib.Path(m.__file__).parent) for m in self.modules)
 
     def test_isort(self):
         """Checks imports order with isort."""
@@ -42,7 +37,7 @@ class TestStyle(unittest.TestCase):
                     "--ignore-whitespace",
                     "--line-length",
                     str(black.DEFAULT_LINE_LENGTH),
-                    *self._package_paths,
+                    *self._paths,
                 ]
             )
         except SystemExit as e:
@@ -54,7 +49,7 @@ class TestStyle(unittest.TestCase):
             os.devnull, "w", encoding="utf-8"
         ) as devnull, contextlib.redirect_stdout(devnull):
             run = pylint.lint.Run(
-                self._package_paths,
+                self._paths,
                 exit=False,
             )
             self.assertEqual(run.linter.generate_reports(), 10.0)
@@ -68,8 +63,9 @@ class TestStyle(unittest.TestCase):
                 check=True,
                 include=re.compile(r"\.py$"),
                 quiet=True,
-                src=self._package_paths,
+                src=self._paths,
                 target_version=[],
+                enable_unstable_feature=[],
             )
         self.assertEqual(e.exception.exit_code, 0)
 
@@ -82,7 +78,7 @@ class TestStyle(unittest.TestCase):
         )
         style_guide = pycodestyle.StyleGuide(
             parser=option_parser,
-            paths=[*self._package_paths],
+            paths=[*self._paths],
         )
         report = style_guide.check_files()
         self.assertEqual(report.total_errors, 0)
