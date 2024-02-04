@@ -14,6 +14,9 @@ isort = "^5.13.2"
 pycodestyle = "^2.11.1"
 
 
+[tool.poetry.group.test.dependencies]
+typeguard = "^4.1.5"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
