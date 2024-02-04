@@ -1,23 +1,20 @@
 """Testing the style of the code."""
 
 import contextlib
-import importlib
 import os
 import pathlib
 import re
 import types
 from typing import ClassVar, Sequence, Tuple
-import unittest
 
 import black
 import click
 import isort.main
-
 import pycodestyle
 import pylint.lint
 
 
-class TestStyle(unittest.TestCase):
+class TestStyle:
     """Testing the style of the package and tests code."""
 
     modules: ClassVar[Sequence[types.ModuleType]]
