@@ -1,0 +1,27 @@
+name: style_tests
+
+on:
+  push:
+    paths:
+      - .github/workflows/style_tests.yml
+      - style_tests/**
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: tests
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ hashFiles('style_tests/poetry.lock') }}
+
+      - name: Run tests
+        run: ../run-tests.sh
+        working-directory: style_tests

@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "style-tests"
+version = "0.1.0"
+description = "TestCase checking the code quality"
+authors = ["Filip Zyzniewski <filip.zyzniewski@gmail.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pylint = "^3.0.3"
+black = "^24.1.1"
+isort = "^5.13.2"
+pycodestyle = "^2.11.1"
+
+
+[tool.poetry.group.test.dependencies]
+typeguard = "^4.1.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
