@@ -14,9 +14,9 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "pylint>=3.0.3,<4",
-    "black>=24.1.1,<25",
-    "isort>=5.13.2,<6",
+    "pylint>=3.0.3,<5",
+    "black>=24.1.1,<27",
+    "isort>=5.13.2,<9",
     "pycodestyle>=2.11.1,<3",
 ]
 
